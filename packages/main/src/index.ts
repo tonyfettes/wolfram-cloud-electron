@@ -4,7 +4,7 @@
 
 import {app, BrowserWindow} from 'electron'
 import {join} from 'path'
-import {URL} from 'url'
+// import {URL} from 'url'
 
 
 
@@ -21,19 +21,6 @@ if (!gotTheLock) {
    */
   const env = import.meta.env
 
-
-  // Install "Vue.js devtools BETA"
-  if (env.MODE === 'development') {
-    app.whenReady()
-      .then(() => import('electron-devtools-installer'))
-      .then(({default: installExtension}) => {
-        /** @see https://chrome.google.com/webstore/detail/vuejs-devtools/ljjemllljcmogpfapbkkighbhhppjdbg */
-        const VUE_DEVTOOLS_BETA = 'ljjemllljcmogpfapbkkighbhhppjdbg'
-        return installExtension(VUE_DEVTOOLS_BETA)
-      })
-      .catch(e => console.error('Failed install extension:', e))
-  }
-
   let mainWindow: BrowserWindow | null = null
 
   async function createWindow() {
@@ -44,22 +31,10 @@ if (!gotTheLock) {
         contextIsolation: env.MODE !== 'test',   // Spectron tests can't work with contextIsolation: true
         enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
       },
+      frame: false,
     })
 
-    /**
-     * URL for main window.
-     * Vite dev server for development.
-     * `file://../renderer/index.html` for production and test
-     */
-    const pageUrl = env.MODE === 'development'
-      ? env.VITE_DEV_SERVER_URL
-      : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
-
-    if (env.MODE === 'development') {
-      mainWindow.webContents.openDevTools()
-    }
-
-    await mainWindow.loadURL(pageUrl)
+    await mainWindow.loadURL('https://wolframcloud.com/')
   }
 
 
